@@ -1,14 +1,9 @@
-﻿using System;
+﻿using agorartc;
+using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using agorartc;
 using System.Diagnostics;
+using System.Drawing;
+using System.Windows.Forms;
 
 namespace RSI_X_Desktop.forms
 {
@@ -183,8 +178,6 @@ namespace RSI_X_Desktop.forms
                 ButtonRelay_Click(btn, new EventArgs());
                 pair.UpdateColors(btn);
             }
-
-
         }
 
 
@@ -205,9 +198,6 @@ namespace RSI_X_Desktop.forms
                 selectedTargetLangs = langActive ?
                     selectedTargetLangs - 1 :
                     selectedTargetLangs + 1;
-#if DEBUG
-                langHolder lh = AgoraObject.room.GetTargetRoomsAt(m_intTar);
-#endif
                 AgoraObject.room.SetActiveTargetRoomsAt(m_intTar, !langActive);
 
                 (sender as ReaLTaiizor.Controls.SkyButton).BackColor = !langActive ? ButtonPushColor : DefaultBackColor;
@@ -224,9 +214,6 @@ namespace RSI_X_Desktop.forms
             if (langActiveT != null)
             {
                 bool langActive = (bool)langActiveT;
-#if DEBUG
-                langHolder lh = AgoraObject.room.GetInterpRoomsAt(m_intRel);
-#endif
                 AgoraObject.room.SetActiveInterpRoomsAt(m_intRel, !langActive);
 
                 (sender as ReaLTaiizor.Controls.SkyButton).BackColor = !langActive ? ButtonPushColor : DefaultBackColor;
@@ -255,6 +242,20 @@ namespace RSI_X_Desktop.forms
 
         internal void Publish()
         {
+            string direct = String.Empty;
+
+            using (var fsd = new FolderBrowserDialog() { RootFolder = Environment.SpecialFolder.MyMusic })
+            {
+                fsd.ShowDialog();
+                direct = fsd.SelectedPath;
+            }
+
+            if (direct == "") return;
+            direct += "\\" + DateTime.Now.ToString("ddMMyyHHmmss") + "\\";
+
+            if (false == System.IO.Directory.Exists(direct))
+                System.IO.Directory.CreateDirectory(direct);
+
             CancelPublish();
             XAgora = new List<Process>();
             int index = 1;
@@ -274,11 +275,11 @@ namespace RSI_X_Desktop.forms
                     langHolder lh = AgoraObject.room.GetTargetRoomsAt(pair.GetIndexLang() + 1);
                     int id = System.Diagnostics.Process.GetCurrentProcess().Id;
 
-                    List<string> args = new() { lh.token, lh.langFull, lh.langShort, id.ToString() };
+                    List<string> args = new() { lh.token, lh.langFull, lh.langShort, id.ToString(), direct };
 
                     Process proc = new Process();
                     proc.StartInfo.CreateNoWindow = true;
-                    proc = System.Diagnostics.Process.Start("appOut.exe", args);
+                    proc = Process.Start("appOut.exe", args);
                     System.Threading.Thread.Sleep(60);
 
                     XAgora.Add(proc);

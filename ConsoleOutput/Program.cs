@@ -8,6 +8,14 @@ namespace ConsoleAppOut
     {
         static int parentID;
         static System.Diagnostics.Process proc;
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="args[0]">token</param>
+        /// <param name="args[1]">cahnnel</param>
+        /// <param name="args[2]">cahnnel lang</param>
+        /// <param name="args[3]">Parent PID</param>
+        /// <param name="args[4]">path to save</param>
         static void Main(string[] args)
         {
 
@@ -15,24 +23,15 @@ namespace ConsoleAppOut
 
             //Console.WriteLine(retInput);
 
-            var retPubl = XAgoraObject.Publish(args[0], args[1], args[2]);
-            Console.WriteLine(retPubl);
+            Console.WriteLine("-----");
+            foreach (var item in args) { Console.WriteLine(item); }
+            Console.WriteLine("-----");
+            var retPubl = XAgoraObject.Publish(args[0], args[1], args[2], args[4]);
 
-           // if (retInput != ERROR_CODE.ERR_OK ||
-            //    retPubl != ERROR_CODE.ERR_OK)
-            //    return;
 
             parentID = System.Convert.ToInt32(args[3]);
             proc = System.Diagnostics.Process.GetProcessById(parentID);
             proc.WaitForExit();
-
-            //proc.Exited += ParentClose;
-
-            //Console.WriteLine(args[1]);
-            //Console.WriteLine(agoraObject.nameDevice);
-
-            //while (true)
-            //    System.Threading.Thread.Sleep(100);
         }
 
         private static void ParentClose(object sender, EventArgs e)
@@ -63,7 +62,7 @@ namespace ConsoleAppOut
             return audioOutDeviceManager.SetCurrentDevice(ind);
         }
 
-        public static ERROR_CODE Publish(string token, string name, string postfix)
+        public static ERROR_CODE Publish(string token, string name, string postfix, string path)
         {
             ERROR_CODE res = Rtc.JoinChannel(token, name, "", 0);
 
@@ -72,17 +71,17 @@ namespace ConsoleAppOut
             nameDevice = nameOUT;
 
             Console.WriteLine("\n\n\n\nHello World!");
-            RecordAudio(true, postfix);
+            RecordAudio(true, path, postfix);
             return res;
         }
 
         public static void UnPublish()
         {
-            RecordAudio(false, "");
+            RecordAudio(false);
             Rtc.LeaveChannel();
             //IsJoin = false;
         }
-        internal static bool RecordAudio(bool state, string postfix)
+        internal static bool RecordAudio(bool state, string path="", string postfix="")
         {
             string direct = Environment.GetFolderPath(Environment.SpecialFolder.MyMusic) + "\\RSI";
             string filename = $"AudioRecording-{DateTime.Now.ToString("dd-MM-yy-HH-mm-ss")}_" + postfix + ".wav";
@@ -97,13 +96,14 @@ namespace ConsoleAppOut
             //    InitialDirectory = direct,
             //    FileName = filename,
             //};
-
+            
             switch (state)
             {
                 case true:
                     //fd.ShowDialog();
 
-                    filename = "c:\\recordings\\" + filename;
+                    filename = $"{path}\\{postfix}.wav";
+                    Console.WriteLine(filename);
 
                     if (System.IO.Path.GetDirectoryName(filename) == String.Empty)
                         return false;
