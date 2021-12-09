@@ -177,6 +177,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\agorartc\agorartc\agorartc\agorartc.csproj" />
+    <ProjectReference Include="..\ConsoleOutput\appOut.csproj" />
   </ItemGroup>
   
     <ItemGroup>
