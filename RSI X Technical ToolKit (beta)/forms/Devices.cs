@@ -1,20 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using System.Runtime.InteropServices;
-using ReaLTaiizor;
 using agorartc;
-using RSI_X_Desktop.forms;
+using System.Diagnostics;
+using System.Drawing;
+using System.Windows.Forms;
+using System.Linq;
+using System.Runtime.InteropServices;
 using static System.Environment;
 
 namespace RSI_X_Desktop.forms
 {
+    internal enum SettingPages
+    {
+        General = 0,
+        Audio = 1,
+        Recorder = 2
+    }
     public partial class Devices : Form
     {
         [DllImport("winmm.dll")]
@@ -32,6 +33,19 @@ namespace RSI_X_Desktop.forms
         public Devices()
         {
             InitializeComponent();
+
+            audioOutDeviceManager = AgoraObject.Rtc.CreateAudioPlaybackDeviceManager();
+
+            for (int i = 0; i < audioOutDeviceManager.GetDeviceCount(); i++)
+            {
+                var ret = audioOutDeviceManager.GetDeviceInfoByIndex(i, out string device, out string id);
+
+                devicesOutName.Add(device);
+                devicesOutInd.Add(id);
+                OutputCmb.Items.Add(device);
+            }
+            OutputCmb.SelectedIndex = 0;
+            UpdateRelayLangs();
         }
         public static void SetVolume(int value) 
         {
@@ -170,7 +184,7 @@ namespace RSI_X_Desktop.forms
                 SpeakersManager.SetCurrentDevice(oldSpeaker);
 
             AgoraObject.GetWorkForm?.DevicesClosed(this);
-            Close();
+            //Close();
         }
 
         private void trackBarSoundOut_ValueChanged()
@@ -189,6 +203,11 @@ namespace RSI_X_Desktop.forms
                 materialShowTabControl1.Alignment = TabAlignment.Left;
             else
                 materialShowTabControl1.Alignment = TabAlignment.Right;
+        }
+
+        internal void ChangeSelectedTab(int newTabIndex)
+        {
+            materialShowTabControl1.SelectedIndex = newTabIndex;
         }
     }
 }

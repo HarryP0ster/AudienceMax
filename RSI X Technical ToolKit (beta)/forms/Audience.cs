@@ -257,10 +257,17 @@ namespace RSI_X_Desktop
                 CallSidePanel(devices);
                 devices.typeOfAlligment(true);
             }
+            else if (devices.Visible == false)
+            {
+                CallSidePanel(devices);
+                devices.typeOfAlligment(true);
+            }
             else
             {
                 DevicesClosed(devices);
+                return;
             }
+            devices.ChangeSelectedTab((int)SettingPages.General);
         }
 
         private void HomeBtn_Click(object sender, EventArgs e)
@@ -289,7 +296,7 @@ namespace RSI_X_Desktop
 
         public void DevicesClosed(Form Wnd)
         {
-            Wnd.Close();
+            Wnd.Hide();
             Animator(panel1, 2, 0, 25, 1);
             panel1.Hide();
             GC.Collect();
@@ -520,12 +527,8 @@ namespace RSI_X_Desktop
 
         private void label2_Click(object sender, EventArgs e)
         {
-            //AgoraObject.RecordAudio(!AgoraObject.IsAudioRecordActive);
-            //labelRecord.ForeColor = AgoraObject.IsAudioRecordActive ?
-            //    Color.Red :
-            //    Color.White;
-            AudioRecording record = new();
-            record.ShowDialog(this);
+            Settings_Click(sender, e);
+            devices.ChangeSelectedTab((int)SettingPages.Recorder);
         }
     }
 }

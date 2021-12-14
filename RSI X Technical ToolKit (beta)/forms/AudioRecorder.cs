@@ -1,50 +1,45 @@
-﻿using agorartc;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using agorartc;
 using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
+using System.Linq;
+using System.Runtime.InteropServices;
+using static System.Environment;
 
 namespace RSI_X_Desktop.forms
 {
-    public partial class AudioRecording : Form
+    public partial class Devices : Form
     {
         private const string AppOut = "appOut.exe";
         private const string StopWord = "Stop";
         private const string StartWord = "Start";
         private string HostName = string.Empty;
-        //Публичный класс, который описывает пары языковых кнопок и списки подключенного оборудования
-        public class BtnCmbPair
+        bool Order = false;
+        public class ChanBtn
         {
             internal ReaLTaiizor.Controls.SkyButton btn;
-            ComboBox cmb;
             //Переменная для хранения количества языков 
             int indexLang;
             //Логика активности языков
             public bool langNotActive { get; private set; } = true;
             //Индекс количества подключенного оборудования
-            public BtnCmbPair(ReaLTaiizor.Controls.SkyButton btn, ComboBox cmb, int indexLang)
+            public ChanBtn(ReaLTaiizor.Controls.SkyButton btn, int indexLang)
             {
                 this.btn = btn;
-                this.cmb = cmb;
                 this.indexLang = indexLang;
-            }
-            public int GetIndexID()
-            {
-                if (cmb == null)
-                    return -1;
-                return cmb.SelectedIndex;
             }
             public int GetIndexLang() { return indexLang; }
             public void ButtonRelay_Click(object sender, EventArgs e)
             {
                 UpdateColors(sender as ReaLTaiizor.Controls.SkyButton, !langNotActive);
             }
-            public void UpdateColors(ReaLTaiizor.Controls.SkyButton btn, bool? active=null)
+            public void UpdateColors(ReaLTaiizor.Controls.SkyButton btn, bool? active = null)
             {
                 if (active.HasValue)
                     langNotActive = active.Value;
-                
+
                 AgoraObject.room.SetActiveInterpRoomsAt(indexLang, !langNotActive);
 
                 if (langNotActive)
@@ -63,7 +58,6 @@ namespace RSI_X_Desktop.forms
             internal void Enable(bool enable)
             {
                 btn.Enabled = enable;
-                cmb.Enabled = enable;
             }
         }
 
@@ -76,83 +70,62 @@ namespace RSI_X_Desktop.forms
 
         List<string> devicesOutInd = new();
         List<string> devicesOutName = new();
-        List<BtnCmbPair> BtnCmbPairs = new();
-        List<BtnCmbPair> BtnCmbPairs2 = new();
+        List<ChanBtn> BtnCmbPairs = new();
+        List<ChanBtn> BtnCmbPairs2 = new();
         List<Process> XAgora = new();
+        List<langHolder> Langs = AgoraObject.GetComplexToken().GetTranslLangs;
+        int Output_ind = 0;
 
-        public AudioRecording()
-        {
-            InitializeComponent();
-            audioOutDeviceManager = AgoraObject.Rtc.CreateAudioPlaybackDeviceManager();
-
-            for (int i = 0; i < audioOutDeviceManager.GetDeviceCount(); i++)
-            {
-                var ret = audioOutDeviceManager.GetDeviceInfoByIndex(i, out string device, out string id);
-
-                devicesOutName.Add(device);
-                devicesOutInd.Add(id);
-            }
-
-            UpdateRelayLangs();
-        }
 
         //Обновляем список языков и оборудования для работы
         private void UpdateRelayLangs()
         {
+            langHolder host = new();
+            host.langFull = AgoraObject.GetHostName();
+            host.langShort = "Floor";
+            host.token = AgoraObject.GetHostToken();
+            Langs.Insert(0, host);
             //Переменная для языков
             var langs = AgoraObject.GetComplexToken();
             var controls = panelRelayButtons.Controls;
             int defHeight = 35;
-            int offset = 1;
+            int offset_l = 1;
+            int offset_r = 1;
 
             ReaLTaiizor.Controls.SkyButton btn;
-            ComboBox cmb;
-            //Соответствие пар
-            BtnCmbPair pair;
+            ChanBtn pair;
 
-            for (int i = 0; i < langs.GetTranslLangs.Count; i++)
+            for (int i = 0; i < Langs.Count; i++)
             {
-                var lang = langs.GetTranslLangs[i];
-                if (lang.langShort == "HOST") continue;
+                var lang = Langs[i];
+                //if (lang.langShort == "HOST") continue;
 
                 btn = CreateButton(lang.langShort, defHeight, 80);
                 btn.Name = "REL" + i.ToString();
                 btn.Height = 35;
                 btn.Font = new Font("Segoe UI Semibold", 12);
                 btn.Cursor = Cursors.Hand;
-                btn.Location = new Point(24, defHeight * offset);
-                btn.Show();
-
-                cmb = new ComboBox();
-                cmb.Name = "CMB" + i.ToString();
-                cmb.Height = defHeight;
-                cmb.Width = 450;
-                cmb.Font = new Font("Segoe UI Semibold", 12);
-                cmb.Cursor = Cursors.Hand;
-                cmb.Location = new Point(120, defHeight * offset);
-                cmb.DropDownStyle = ComboBoxStyle.DropDownList;
-
-
-
-                if (devicesOutName.Count > 0)
+                if (!Order)
                 {
-                    foreach (var dev in devicesOutName)
-                        cmb.Items.Add(dev);
-                    cmb.SelectedIndex = 0;
+                    btn.Location = new Point(64, defHeight * offset_l);
+                    offset_l++;
                 }
-                cmb.Show();
-
-                controls.Add(cmb);
+                else
+                {
+                    btn.Location = new Point(284, defHeight * offset_r);
+                    offset_r++;
+                }
+                btn.Show();
+                Order = !Order;
 
                 controls.Add(btn);
 
 
-                pair = new(btn, cmb, i);
+                pair = new(btn, i);
 
                 btn.Click += pair.ButtonRelay_Click;
 
                 BtnCmbPairs.Add(pair);
-                offset++;
                 ButtonRelay_Click(btn, new EventArgs());
                 pair.UpdateColors(btn);
             }
@@ -166,7 +139,7 @@ namespace RSI_X_Desktop.forms
 
             using (var fsd = new FolderBrowserDialog() { RootFolder = Environment.SpecialFolder.MyMusic })
             {
-                fsd.ShowDialog();
+                fsd.ShowDialog(this);
                 direct = fsd.SelectedPath;
             }
 
@@ -180,16 +153,15 @@ namespace RSI_X_Desktop.forms
             foreach (var pair in BtnCmbPairs)
             {
                 pair.Enable(false);
-                
+
                 if (pair.langNotActive == false)
                 {
-                    int indId = pair.GetIndexID();
-                    string ind = devicesOutInd[indId];
+                    string ind = devicesOutInd[Output_ind];
 
                     //pair.UpdateColors(pair.btn, pair.langNotActive);
                     //pair.btn.Refresh();
-
-                    langHolder lh = AgoraObject.room.GetTargetRoomsAt(pair.GetIndexLang() + 1);
+                    langHolder lh;
+                        lh = AgoraObject.room.GetTargetRoomsAt(pair.GetIndexLang());
                     int id = Process.GetCurrentProcess().Id;
 
                     List<string> args = new() { lh.token, lh.langFull, lh.langShort, id.ToString(), direct };
@@ -245,7 +217,7 @@ namespace RSI_X_Desktop.forms
                 bool langActive = (bool)langActiveT;
                 AgoraObject.room.SetActiveInterpRoomsAt(m_intRel, !langActive);
 
-                (sender as ReaLTaiizor.Controls.SkyButton).BackColor = 
+                (sender as ReaLTaiizor.Controls.SkyButton).BackColor =
                     !langActive ? ButtonPushColor : DefaultBackColor;
             }
         }
@@ -286,15 +258,14 @@ namespace RSI_X_Desktop.forms
             btn.NormalBGColorB = NormB;
         }
 
-        private void Ingestor_FormClosed(object sender, FormClosedEventArgs e)
+        private void OutputCmb_SelectedIndexChanged(object sender, EventArgs e)
         {
-            AgoraObject.LeaveHostChannel();
-            AgoraObject.LeaveSrcChannel();
-            //AgoraObject.LeaveTranslChannel();
-            //AgoraObject.LeaveTargetChannel();
-            KillRecProcess();
-            Owner.Show();
-            Owner.Refresh();
+            Output_ind = OutputCmb.SelectedIndex;
+        }
+
+        private void materialShowTabControl1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            //
         }
     }
 }
