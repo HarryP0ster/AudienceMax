@@ -79,7 +79,6 @@ namespace ConsoleAppOut
         {
             RecordAudio(false);
             Rtc.LeaveChannel();
-            //IsJoin = false;
         }
         internal static bool RecordAudio(bool state, string path="", string postfix="")
         {
@@ -88,20 +87,9 @@ namespace ConsoleAppOut
 
             if (false == System.IO.Directory.Exists(direct))
                 System.IO.Directory.CreateDirectory(direct);
-
-            //SaveFileDialog fd = new()
-            //{
-            //    DefaultExt = "wav",
-            //    Filter = "Audio files(*.wav)|*.wav|Audio files(*.acc)|*.acc",
-            //    InitialDirectory = direct,
-            //    FileName = filename,
-            //};
-            
             switch (state)
             {
                 case true:
-                    //fd.ShowDialog();
-
                     filename = $"{path}\\{postfix}.wav";
                     Console.WriteLine(filename);
 
@@ -118,7 +106,6 @@ namespace ConsoleAppOut
                     Rtc.StopAudioRecording();
                     break;
             }
-            //IsAudioRecordActive = state;
             return true;
         }
     }

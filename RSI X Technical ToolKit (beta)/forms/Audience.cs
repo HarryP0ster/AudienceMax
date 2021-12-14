@@ -83,8 +83,6 @@ namespace RSI_X_Desktop
             AgoraObject.Rtc.EnableLocalAudio(false);
             AgoraObject.SetWndEventHandler(this);
 
-            //pictureBoxRemoteVideo.Width = this.Width;
-            //RemoteWnd = PBRemoteVideo.Handle;
             UpdateLangComboBox();
             
             mSwitchOriginal.Checked = true;
@@ -132,7 +130,6 @@ namespace RSI_X_Desktop
         }
         public void BroadcasterLeave(uint uid)
         {
-            //throw new NotImplementedException();
             if (hostBroadcasters.ContainsKey(uid))
             {
                 if (InvokeRequired)
@@ -159,7 +156,6 @@ namespace RSI_X_Desktop
             labelVideo.ForeColor = AgoraObject.IsAllRemoteVideoMute ?
                 Color.White :
                 Color.Red;
-            //PBRemoteVideo.Visible = !AgoraObject.IsAllRemoteVideoMute;
         }
 
         private void labelVolume_Click(object sender, EventArgs e)
@@ -287,7 +283,6 @@ namespace RSI_X_Desktop
             if (panel1.Visible == false || Wnd.Visible == false)
             {
                 panel1.ResumeLayout();
-                //panel1.Location = new Point(Size.Width, panel1.Location.Y);
                 panel1.Show();
                 Animator(panel1, -2, 0, 25, 1);
                 Wnd.Show();
