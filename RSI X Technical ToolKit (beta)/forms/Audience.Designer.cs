@@ -50,6 +50,7 @@ namespace RSI_X_Desktop
             this.mSwitchOriginal = new MaterialSkin.Controls.MaterialSwitch();
             this.labelOrig = new System.Windows.Forms.Label();
             this.tableLayoutPanel6 = new System.Windows.Forms.TableLayoutPanel();
+            this.button3 = new ReaLTaiizor.Controls.Button();
             this.labelRecord = new System.Windows.Forms.Label();
             this.RemotePanel = new System.Windows.Forms.TableLayoutPanel();
             this.streamsTable = new System.Windows.Forms.TableLayoutPanel();
@@ -423,9 +424,12 @@ namespace RSI_X_Desktop
             // 
             // tableLayoutPanel6
             // 
-            this.tableLayoutPanel6.ColumnCount = 2;
+            this.tableLayoutPanel6.ColumnCount = 4;
             this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 40F));
+            this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel6.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 60F));
+            this.tableLayoutPanel6.Controls.Add(this.button3, 2, 0);
             this.tableLayoutPanel6.Controls.Add(this.labelRecord, 0, 0);
             this.tableLayoutPanel6.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel6.Location = new System.Drawing.Point(313, 3);
@@ -434,6 +438,26 @@ namespace RSI_X_Desktop
             this.tableLayoutPanel6.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel6.Size = new System.Drawing.Size(714, 65);
             this.tableLayoutPanel6.TabIndex = 44;
+            // 
+            // button3
+            // 
+            this.button3.BackColor = System.Drawing.Color.Transparent;
+            this.button3.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.button3.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.button3.EnteredColor = System.Drawing.Color.DarkRed;
+            this.button3.Font = new System.Drawing.Font("Bahnschrift Condensed", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.button3.Image = null;
+            this.button3.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.button3.InactiveColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(50)))));
+            this.button3.Location = new System.Drawing.Point(318, 3);
+            this.button3.Margin = new System.Windows.Forms.Padding(3, 3, 3, 10);
+            this.button3.Name = "button3";
+            this.button3.PressedColor = System.Drawing.Color.FromArgb(((int)(((byte)(165)))), ((int)(((byte)(37)))), ((int)(((byte)(37)))));
+            this.button3.Size = new System.Drawing.Size(120, 52);
+            this.button3.TabIndex = 23;
+            this.button3.Text = "SIGN OFF";
+            this.button3.TextAlignment = System.Drawing.StringAlignment.Center;
+            this.button3.Click += new System.EventHandler(this.button4_Click);
             // 
             // labelRecord
             // 
@@ -631,5 +655,6 @@ namespace RSI_X_Desktop
         private System.Windows.Forms.Label labelVolume;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel6;
         private System.Windows.Forms.Label labelRecord;
+        private ReaLTaiizor.Controls.Button button3;
     }
 }
