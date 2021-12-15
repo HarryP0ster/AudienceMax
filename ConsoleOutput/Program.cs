@@ -64,8 +64,10 @@ namespace ConsoleAppOut
 
         public static ERROR_CODE Publish(string token, string name, string postfix, string path)
         {
+            Rtc.MuteLocalAudioStream(true);
+            Rtc.EnableLocalAudio(false);
+            Rtc.MuteLocalVideoStream(true);
             ERROR_CODE res = Rtc.JoinChannel(token, name, "", 0);
-
 
             audioOutDeviceManager.GetCurrentDeviceInfo(out string idOUT, out string nameOUT);
             nameDevice = nameOUT;
