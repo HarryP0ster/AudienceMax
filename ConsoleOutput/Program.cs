@@ -1,6 +1,7 @@
 ﻿using System;
 using agorartc;
 using System.Threading;
+using System.Runtime.InteropServices;
 
 namespace ConsoleAppOut
 {
@@ -16,6 +17,8 @@ namespace ConsoleAppOut
         /// <param name="args[2]">cahnnel lang</param>
         /// <param name="args[3]">Parent PID</param>
         /// <param name="args[4]">path to save</param>
+        [DllImport("winmm.dll")]
+        public static extern int waveOutSetVolume(IntPtr hwo, uint dwVolume); //Контроль громкости
         static void Main(string[] args)
         {
 
@@ -26,6 +29,12 @@ namespace ConsoleAppOut
             Console.WriteLine("-----");
             foreach (var item in args) { Console.WriteLine(item); }
             Console.WriteLine("-----");
+            
+            int NewVolume = ((ushort.MaxValue / 100) * 0);
+            uint NewVolumeAllChannels = (((uint)NewVolume & 0x0000ffff) | ((uint)NewVolume << 16));
+
+            waveOutSetVolume(IntPtr.Zero, NewVolumeAllChannels);
+
             var retPubl = XAgoraObject.Publish(args[0], args[1], args[2], args[4]);
 
 
@@ -43,7 +52,6 @@ namespace ConsoleAppOut
     {
         static AgoraRtcEngine Rtc;
         static AgoraAudioRecordingDeviceManager audioInDeviceManager;
-        static AgoraAudioPlaybackDeviceManager audioPlaybackDeviceManager;
         static AgoraAudioPlaybackDeviceManager audioOutDeviceManager;
 
         const string AppID = "31f0e571a89542b09049087e3283417f";
@@ -64,8 +72,10 @@ namespace ConsoleAppOut
 
         public static ERROR_CODE Publish(string token, string name, string postfix, string path)
         {
+            Rtc.MuteLocalAudioStream(true);
+            Rtc.EnableLocalAudio(false);
+            Rtc.MuteLocalVideoStream(true);
             ERROR_CODE res = Rtc.JoinChannel(token, name, "", 0);
-
 
             audioOutDeviceManager.GetCurrentDeviceInfo(out string idOUT, out string nameOUT);
             nameDevice = nameOUT;
@@ -83,7 +93,7 @@ namespace ConsoleAppOut
         internal static bool RecordAudio(bool state, string path="", string postfix="")
         {
             string direct = Environment.GetFolderPath(Environment.SpecialFolder.MyMusic) + "\\RSI";
-            string filename = $"AudioRecording-{DateTime.Now.ToString("dd-MM-yy-HH-mm-ss")}_" + postfix + ".wav";
+            string filename = $"AudioRecording-{DateTime.Now:dd-MM-yy-HH-mm-ss}_" + postfix + ".wav";
 
             if (false == System.IO.Directory.Exists(direct))
                 System.IO.Directory.CreateDirectory(direct);
