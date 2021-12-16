@@ -261,7 +261,7 @@ namespace RSI_X_Desktop
             this.button3.TabIndex = 23;
             this.button3.Text = "SIGN OFF";
             this.button3.TextAlignment = System.Drawing.StringAlignment.Center;
-            this.button3.Click += new System.EventHandler(this.button4_Click);
+            this.button3.Click += new System.EventHandler(this.HomeBtn_Click);
             // 
             // labelVideo
             // 

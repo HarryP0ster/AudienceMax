@@ -45,6 +45,8 @@ namespace RSI_X_Desktop.forms
                 AgoraObject.CurrentForm = CurForm.FormAudience;
                 Audit.Show(this);
             }
+            else
+                NewTextBox.Clear();
         }
 
         private void MainForm_Load(object sender, EventArgs e)
