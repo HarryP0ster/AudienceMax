@@ -276,6 +276,7 @@ namespace RSI_X_Desktop
 
         private void HomeBtn_Click(object sender, EventArgs e)
         {
+            Owner.Show();
             this.Close();
         }
 
