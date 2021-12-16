@@ -449,7 +449,7 @@ namespace RSI_X_Desktop
             this.button3.Image = null;
             this.button3.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.button3.InactiveColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(50)))), ((int)(((byte)(50)))));
-            this.button3.Location = new System.Drawing.Point(318, 3);
+            this.button3.Location = new System.Drawing.Point(310, 3);
             this.button3.Margin = new System.Windows.Forms.Padding(3, 3, 3, 10);
             this.button3.Name = "button3";
             this.button3.PressedColor = System.Drawing.Color.FromArgb(((int)(((byte)(165)))), ((int)(((byte)(37)))), ((int)(((byte)(37)))));
