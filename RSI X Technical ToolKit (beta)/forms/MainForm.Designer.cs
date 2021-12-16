@@ -77,7 +77,7 @@ namespace RSI_X_Desktop.forms
             this.formTheme1.SmartBounds = false;
             this.formTheme1.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.formTheme1.TabIndex = 0;
-            this.formTheme1.Text = "RSI EXCHANGE AUDIENCE";
+            this.formTheme1.Text = "RSI EXCHANGE RECORDER";
             this.formTheme1.Click += new System.EventHandler(this.formTheme1_Click);
             // 
             // controlBox1
@@ -126,7 +126,7 @@ namespace RSI_X_Desktop.forms
             this.tableLayoutPanel1.ColumnCount = 3;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 47F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 48F));
             this.tableLayoutPanel1.Controls.Add(this.VersionLabel, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.LocalTimeLabel, 1, 0);
             this.tableLayoutPanel1.Controls.Add(this.TimeLabel, 2, 0);
@@ -328,10 +328,10 @@ namespace RSI_X_Desktop.forms
             // 
             this.tableLayoutPanelVersions.ColumnCount = 5;
             this.tableLayoutPanelVersions.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 15F));
-            this.tableLayoutPanelVersions.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 54.94295F));
+            this.tableLayoutPanelVersions.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 53F));
             this.tableLayoutPanelVersions.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 85F));
-            this.tableLayoutPanelVersions.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 45.05704F));
-            this.tableLayoutPanelVersions.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 19F));
+            this.tableLayoutPanelVersions.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 47F));
+            this.tableLayoutPanelVersions.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanelVersions.Controls.Add(this.labelVersion, 1, 0);
             this.tableLayoutPanelVersions.Controls.Add(this.labelBeta, 3, 0);
             this.tableLayoutPanelVersions.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -349,7 +349,7 @@ namespace RSI_X_Desktop.forms
             this.labelVersion.Dock = System.Windows.Forms.DockStyle.Right;
             this.labelVersion.Font = new System.Drawing.Font("Bahnschrift Condensed", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.labelVersion.ForeColor = System.Drawing.Color.White;
-            this.labelVersion.Location = new System.Drawing.Point(211, 0);
+            this.labelVersion.Location = new System.Drawing.Point(199, 0);
             this.labelVersion.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labelVersion.Name = "labelVersion";
             this.labelVersion.Size = new System.Drawing.Size(131, 36);
@@ -363,12 +363,12 @@ namespace RSI_X_Desktop.forms
             this.labelBeta.Dock = System.Windows.Forms.DockStyle.Left;
             this.labelBeta.Font = new System.Drawing.Font("Bahnschrift Condensed", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.labelBeta.ForeColor = System.Drawing.Color.White;
-            this.labelBeta.Location = new System.Drawing.Point(435, 0);
+            this.labelBeta.Location = new System.Drawing.Point(423, 0);
             this.labelBeta.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labelBeta.Name = "labelBeta";
-            this.labelBeta.Size = new System.Drawing.Size(72, 36);
+            this.labelBeta.Size = new System.Drawing.Size(79, 36);
             this.labelBeta.TabIndex = 1;
-            this.labelBeta.Text = "AUDIENCE";
+            this.labelBeta.Text = "RECORDER";
             this.labelBeta.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // labelLogo
@@ -402,8 +402,9 @@ namespace RSI_X_Desktop.forms
             this.MinimumSize = new System.Drawing.Size(126, 50);
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "RSI EXCHANGE AUDIENCE";
+            this.Text = "RSI EXCHANGE RECORDER";
             this.TransparencyKey = System.Drawing.Color.Fuchsia;
+            this.Shown += new System.EventHandler(this.MainForm_Shown);
             this.Resize += new System.EventHandler(this.MainForm_Resize);
             this.formTheme1.ResumeLayout(false);
             this.tableLayoutPanelMain.ResumeLayout(false);

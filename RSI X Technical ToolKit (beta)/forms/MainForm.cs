@@ -125,5 +125,10 @@ namespace RSI_X_Desktop.forms
             if (e.KeyChar == (char)Keys.Enter)
                 JoinButton_Click(JoinButton, new());
         }
+
+        private void MainForm_Shown(object sender, EventArgs e)
+        {
+            NewTextBox.Focus();
+        }
     }
 }

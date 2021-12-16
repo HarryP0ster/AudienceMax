@@ -37,6 +37,7 @@ namespace RSI_X_Desktop
         private void Audience_Load(object sender, EventArgs e)
         {
             this.DoubleBuffered = true;
+            SignOffToCenter();
             FormAudience.Parent = this;
             ResizeForm(new Size(1280, 800), this);
 
@@ -45,6 +46,13 @@ namespace RSI_X_Desktop
             CallRefresh = new RefreshRemoteWnd(RefreshDelegate);
             
             JoinChannel();
+        }
+
+        private void SignOffToCenter()
+        {
+            float width_left = tableLayoutPanel4.Width + labelAudio.Width + labelVideo.Width;
+            float width_right = tableLayoutPanel5.Width + comboBoxPanel.Width + labelRecord.Width;
+            tableLayoutPanel3.ColumnStyles[3].Width = width_right - width_left;
         }
 
         public void RefreshDelegate()
