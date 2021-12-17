@@ -37,6 +37,9 @@ namespace RSI_X_Desktop
         private void Audience_Load(object sender, EventArgs e)
         {
             this.DoubleBuffered = true;
+            RemotePanel.ColumnStyles[1].SizeType = SizeType.Absolute;
+            RemotePanel.ColumnStyles[0].Width = 100;
+            RemotePanel.ColumnStyles[1].Width = 0;
             SignOffToCenter();
             FormAudience.Parent = this;
             ResizeForm(new Size(1280, 800), this);

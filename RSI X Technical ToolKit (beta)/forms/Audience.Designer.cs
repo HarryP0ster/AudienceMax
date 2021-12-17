@@ -467,8 +467,8 @@ namespace RSI_X_Desktop
             // RemotePanel
             // 
             this.RemotePanel.ColumnCount = 2;
-            this.RemotePanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 83.58074F));
-            this.RemotePanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 16.41926F));
+            this.RemotePanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 83.33F));
+            this.RemotePanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 16.67F));
             this.RemotePanel.Controls.Add(this.streamsTable, 0, 0);
             this.RemotePanel.Controls.Add(this.panel1, 1, 0);
             this.RemotePanel.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -483,7 +483,7 @@ namespace RSI_X_Desktop
             // 
             this.streamsTable.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.streamsTable.BackColor = System.Drawing.Color.Silver;
-            this.streamsTable.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("streamsTable.BackgroundImage")));
+            this.streamsTable.BackgroundImage = global::RSI_X_Desktop.Properties.Resources.logotype_black;
             this.streamsTable.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.streamsTable.ColumnCount = 1;
             this.streamsTable.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
@@ -494,16 +494,16 @@ namespace RSI_X_Desktop
             this.streamsTable.RowCount = 1;
             this.streamsTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.streamsTable.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.streamsTable.Size = new System.Drawing.Size(1058, 592);
+            this.streamsTable.Size = new System.Drawing.Size(1055, 592);
             this.streamsTable.TabIndex = 2;
             // 
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.Color.WhiteSmoke;
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel1.Location = new System.Drawing.Point(1067, 3);
+            this.panel1.Location = new System.Drawing.Point(1064, 3);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(204, 592);
+            this.panel1.Size = new System.Drawing.Size(207, 592);
             this.panel1.TabIndex = 1;
             // 
             // nightControlBox1
