@@ -293,14 +293,14 @@ namespace RSI_X_Desktop
             {
                 panel1.Location = new Point(Size.Width, panel1.Location.Y);
                 panel1.Show();
-                Animator(panel1, -5, 0, 90, 1);
+                Animator(panel1, -45, 0, 10, 1);
                 Wnd.Show();
             }
         }
 
         public void DevicesClosed(Form Wnd) 
         {
-            Animator(panel1, 5, 0, 90, 1);
+            Animator(panel1, 45, 0, 10, 1);
             panel1.Hide();
             Wnd.Close();
             GC.Collect();
@@ -313,6 +313,7 @@ namespace RSI_X_Desktop
             for (int ind = 0; ind < itterations; ind++)
             {
                 RemotePanel.ColumnStyles[1].Width = RemotePanel.ColumnStyles[1].Width - offset_x;
+                Update();
             }
             panel.ResumeLayout();
         }
@@ -367,6 +368,7 @@ namespace RSI_X_Desktop
             List<bool> temp_list = new List<bool>(TakenPages);
 
             streamsTable.BackgroundImage = null;
+            streamsTable.BackColor = Color.FromArgb(85, 85, 85);
 
             if (temp_list.Contains(false) == false)
             {
@@ -434,7 +436,10 @@ namespace RSI_X_Desktop
             hostBroadcasters.Remove(uid);
 
             if (hostBroadcasters.Count == 0)
+            {
                 streamsTable.BackgroundImage = Properties.Resources.logotype_black;
+                streamsTable.BackColor = Color.Silver;
+            }
 
             if (index - hostBroadcasters.Count <= streamsTable.ColumnCount && AddOrder)
             {
