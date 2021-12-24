@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using agorartc;
+using agora.rtc;
 using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
@@ -63,8 +63,6 @@ namespace RSI_X_Desktop.forms
 
         public bool GetOutCode { get; private set; } = false;
         public bool IsPublishing { get; private set; } = false;
-
-        AgoraAudioPlaybackDeviceManager audioOutDeviceManager;
 
         static readonly Color ButtonPushColor = Color.BurlyWood;
 

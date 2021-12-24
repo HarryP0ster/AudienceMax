@@ -1,5 +1,5 @@
 ﻿using System;
-using agorartc;
+using agora.rtc;
 using System.Threading;
 using System.Runtime.InteropServices;
 
@@ -50,35 +50,31 @@ namespace ConsoleAppOut
     }
     static class XAgoraObject
     {
-        static AgoraRtcEngine Rtc;
-        static AgoraAudioRecordingDeviceManager audioInDeviceManager;
-        static AgoraAudioPlaybackDeviceManager audioOutDeviceManager;
+        static IAgoraRtcEngine Rtc;
+        static IAgoraRtcAudioRecordingDeviceManager audioInDeviceManager;
+        static IAgoraRtcAudioPlaybackDeviceManager audioOutDeviceManager;
 
         const string AppID = "31f0e571a89542b09049087e3283417f";
-        static string nameDevice;
         static XAgoraObject()
         {
-            Rtc = AgoraRtcEngine.CreateRtcEngine();
+            Rtc = AgoraRtcEngine.CreateAgoraRtcEngine();
             Rtc.MuteLocalVideoStream(true);
             Rtc.Initialize(new RtcEngineContext(AppID));
-            audioInDeviceManager = Rtc.CreateAudioRecordingDeviceManager();
-            audioOutDeviceManager = Rtc.CreateAudioPlaybackDeviceManager();
+            audioInDeviceManager = Rtc.GetAgoraRtcAudioRecordingDeviceManager();
+            audioOutDeviceManager = Rtc.GetAgoraRtcAudioPlaybackDeviceManager();
         }
 
-        public static ERROR_CODE SetupOutputDevices(string ind)
+        public static int SetupOutputDevices(string ind)
         {
-            return audioOutDeviceManager.SetCurrentDevice(ind);
+            return audioOutDeviceManager.SetPlaybackDevice(ind);
         }
 
-        public static ERROR_CODE Publish(string token, string name, string postfix, string path)
+        public static int Publish(string token, string name, string postfix, string path)
         {
             Rtc.MuteLocalAudioStream(true);
             Rtc.EnableLocalAudio(false);
             Rtc.MuteLocalVideoStream(true);
-            ERROR_CODE res = Rtc.JoinChannel(token, name, "", 0);
-
-            audioOutDeviceManager.GetCurrentDeviceInfo(out string idOUT, out string nameOUT);
-            nameDevice = nameOUT;
+            int res = Rtc.JoinChannel(token, name, "", 0);
 
             Console.WriteLine("\n\n\n\nHello World!");
             RecordAudio(true, path, postfix);

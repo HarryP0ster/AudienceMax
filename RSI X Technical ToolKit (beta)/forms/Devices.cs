@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using agorartc;
 using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Linq;
 using System.Runtime.InteropServices;
+using agora.rtc;
 using static System.Environment;
 
 namespace RSI_X_Desktop.forms
@@ -22,30 +22,30 @@ namespace RSI_X_Desktop.forms
         public  static extern int waveOutSetVolume(IntPtr hwo, uint dwVolume); //Контроль громкости
         private static int volume = 100;
         public int Volume { get => volume; }
-        
-        private IFormHostHolder workForm = AgoraObject.GetWorkForm;
-        private static AgoraAudioPlaybackDeviceManager SpeakersManager;
-        static List<string> Speakers;
+        public DeviceInfo SelectedSpeaker { get; private set; }
+
+        private IFormHostHolder workForm;
+        private static IAgoraRtcAudioPlaybackDeviceManager SpeakersManager;
+        static List<DeviceInfo> Speakers;
 
         private static int oldVolumeOut;
-        private static string oldSpeaker = null;
+        private static DeviceInfo oldSpeaker;
 
         public Devices()
         {
             InitializeComponent();
 
-            audioOutDeviceManager = AgoraObject.Rtc.CreateAudioPlaybackDeviceManager();
+            SpeakersManager = AgoraObject.Rtc.GetAgoraRtcAudioPlaybackDeviceManager();
 
-            for (int i = 0; i < audioOutDeviceManager.GetDeviceCount(); i++)
+            foreach (var dev in SpeakersManager.EnumeratePlaybackDevices())
             {
-                var ret = audioOutDeviceManager.GetDeviceInfoByIndex(i, out string device, out string id);
-
-                devicesOutName.Add(device);
-                devicesOutInd.Add(id);
-                OutputCmb.Items.Add(device);
+                devicesOutName.Add(dev.deviceName);
+                devicesOutInd.Add(dev.deviceId);
+                OutputCmb.Items.Add(dev.deviceName);
             }
             OutputCmb.SelectedIndex = 0;
             UpdateRelayLangs();
+            workForm = AgoraObject.GetWorkForm;
         }
         public static void SetVolume(int value) 
         {
@@ -58,8 +58,6 @@ namespace RSI_X_Desktop.forms
 
         private void NewDevices_Load(object sender, EventArgs e)
         {
-            SpeakersManager = AgoraObject.Rtc.CreateAudioPlaybackDeviceManager();
-
             oldVolumeOut = Volume;
             trackBarSoundOut.Value = oldVolumeOut;
             
@@ -70,10 +68,10 @@ namespace RSI_X_Desktop.forms
         private void UpdateComboBoxSpeaker()
         {
             Speakers = getListAudioOutDevices();
-            bool hasoldSpeaker = Speakers.Any((s) => s == oldSpeaker);
+            bool hasoldSpeaker = Speakers.Any((s) => s.deviceId == oldSpeaker.deviceId);
 
-            int index = (oldSpeaker != null) ?
-                Speakers.FindLastIndex((s) => s == oldSpeaker) :
+            int index = (oldSpeaker.deviceId != null) ?
+                Speakers.FindLastIndex((s) => s.deviceId == oldSpeaker.deviceId) :
                 getActiveAudioOutputDevice();
 
             if (Speakers.Count == 0)
@@ -109,51 +107,46 @@ namespace RSI_X_Desktop.forms
 
         private int getActiveAudioOutputDevice()
         {
-            int id = -1;
+            bool found = false;
+            int id = 0;
+            var device = SpeakersManager.GetPlaybackDevice();
 
-            SpeakersManager.GetCurrentDeviceInfo(out string idAcvite, out string nameAcitve);
-
-            for (int i = 0; i < SpeakersManager.GetDeviceCount(); i++)
+            foreach (var dev in SpeakersManager.EnumeratePlaybackDevices())
             {
-                var ret = SpeakersManager.GetDeviceInfoByIndex(i, out string name, out string deviceid);
-                if (idAcvite == deviceid)
-                {
-                    id = i;
-                    break;
-                }
+                if (device == dev.deviceId) { found = true; break; };
+                id += 1;
             }
+
+            if (!found)
+                id = -1;
+
             return id;
         }
 
         #region getDevicesList
 
-        private List<string> getListAudioOutDevices()
+        private static List<DeviceInfo> getListAudioOutDevices()
         {
-            List<string> devicesOut = new();
-
-            for (int i = 0; i < SpeakersManager.GetDeviceCount(); i++)
-            {
-                string device, id;
-
-                var ret = SpeakersManager.GetDeviceInfoByIndex(i, out device, out id);
-
-                if (ret == ERROR_CODE.ERR_OK)
-                    devicesOut.Add(device);
-            }
+            List<DeviceInfo> devicesOut = new();
+            devicesOut.AddRange(SpeakersManager.EnumeratePlaybackDevices());
 
             return devicesOut;
         }
+
         #endregion
 
         #region ComboBoxEventHandlers
-
         private void comboBoxAudioOutput_SelectedIndexChanged(object sender, EventArgs e)
         {
+            DeviceInfo dev;
             int ind = ((ComboBox)sender).SelectedIndex;
-            string name, id;
+            var RecorderList = SpeakersManager.EnumeratePlaybackDevices();
 
-            SpeakersManager.GetDeviceInfoByIndex(ind, out name, out id);
-            //audioOutDeviceManager.SetCurrentDevice(id);
+            if (RecorderList.Length > ind)
+                dev = RecorderList[ind];
+
+            SelectedSpeaker = dev;
+            SpeakersManager.SetPlaybackDevice(dev.deviceId);
         }
 
         #endregion
@@ -182,8 +175,8 @@ namespace RSI_X_Desktop.forms
             trackBarSoundOut.Value = oldVolumeOut;
             trackBarSoundOut_ValueChanged();
 
-            if (oldSpeaker != null)
-                SpeakersManager.SetCurrentDevice(oldSpeaker);
+            if (oldSpeaker.deviceId != null)
+                SpeakersManager.SetPlaybackDevice(oldSpeaker.deviceId);
 
             AgoraObject.GetWorkForm?.DevicesClosed(this);
             //Close();
