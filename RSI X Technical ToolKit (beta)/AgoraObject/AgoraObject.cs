@@ -16,15 +16,6 @@ namespace RSI_X_Desktop
         HOST,
         UNKNOWN
     };
-    enum CurForm 
-    {
-        FormTransLater,
-        FormBroadcaster,
-        FormAudience,
-        FormEngineer,
-        FormEngineer2,
-        None
-    }
     static class AgoraObject
     {
         
@@ -44,11 +35,6 @@ namespace RSI_X_Desktop
         public static string RoomLang { get => RoomName.Split('_')[0]; }
         public static string RoomName { get; private set; } = ""; //Full name of the interpreters room without 8 digits
         public static string RoomTarg { get; private set; } = ""; //Full name of the target room without 8 digits
-        public static CurForm CurrentForm = CurForm.None;
-
-        //TODO: DELETE LATER
-        //private static Random rnd = new Random();
-        //DELETE LATER
 
         internal static IAgoraRtcEngine Rtc;
 
@@ -75,6 +61,12 @@ namespace RSI_X_Desktop
         {
             Rtc = AgoraRtcEngine.CreateAgoraRtcEngine();
             Rtc.Initialize(new RtcEngineContext(AppID));
+
+            Rtc.SetChannelProfile(CHANNEL_PROFILE_TYPE.CHANNEL_PROFILE_COMMUNICATION);
+            Rtc.SetClientRole(CLIENT_ROLE_TYPE.CLIENT_ROLE_AUDIENCE);
+            Rtc.EnableVideo();
+            Rtc.EnableLocalVideo(false);
+            Rtc.EnableLocalAudio(false);
         }
         #region token logic
         static public bool JoinRoom(string code)
@@ -143,9 +135,13 @@ namespace RSI_X_Desktop
             m_channelSrc.InitEventHandler(srcHandler);
             m_channelSrc.SetClientRole(CLIENT_ROLE_TYPE.CLIENT_ROLE_AUDIENCE);
 
-            ChannelMediaOptions options = new();
-            options.autoSubscribeAudio = !IsAllRemoteAudioMute;
-            options.autoSubscribeVideo = false;
+            ChannelMediaOptions options = new()
+            {
+                autoSubscribeAudio = true,
+                autoSubscribeVideo = false,
+                publishLocalAudio = false,
+                publishLocalVideo = false
+            };
 
             int ret = m_channelSrc.JoinChannel(token, info, nUID, options);
 
@@ -170,12 +166,14 @@ namespace RSI_X_Desktop
             m_channelHost = Rtc.CreateChannel(lpChannelName);
             m_channelHost.InitEventHandler(hostHandler);
             m_channelHost.SetClientRole(CLIENT_ROLE_TYPE.CLIENT_ROLE_AUDIENCE);
-            m_channelHost.SetDefaultMuteAllRemoteVideoStreams(false);
 
-            ChannelMediaOptions options = new();
-            options.autoSubscribeAudio = !IsAllRemoteAudioMute;
-            options.autoSubscribeVideo = !IsAllRemoteVideoMute;
-
+            ChannelMediaOptions options = new()
+            {
+                autoSubscribeAudio = true,
+                autoSubscribeVideo = true,
+                publishLocalAudio = false,
+                publishLocalVideo = false
+            };
 
             //ERROR_CODE ret = m_channelHost.JoinChannel(token, info, nUID, options);
             int ret = m_channelHost.JoinChannelWithUserAccount(token, NickCenter.ToAudienceNick(), options);
@@ -199,7 +197,7 @@ namespace RSI_X_Desktop
             else
                 hostBroacsters.Add(uid, user);
             workForm.NewBroadcaster(uid, user);
-            System.Diagnostics.Debug.WriteLine($"{DateTime.Now.ToString("HH:mm:ss")}: New user {user.userAccount} {uid}");
+            DebugWriter.WriteTime($"New user {user.userAccount} {uid}");
         }
         internal static void UpdateHostUserInfo(uint uid, UserInfo user)
         {
@@ -207,7 +205,7 @@ namespace RSI_X_Desktop
             {
                 hostBroacsters[uid] = user;
                 workForm.BroadcasterUpdateInfo(uid, user);
-                System.Diagnostics.Debug.WriteLine($"{DateTime.Now.ToString("HH:mm:ss")}: update user {user.userAccount} {uid}");
+                DebugWriter.WriteTime($"update user {user.userAccount} {uid}");
             }
         }
         internal static void RemoveHostUserInfo(uint uid)
@@ -216,48 +214,32 @@ namespace RSI_X_Desktop
             {
                 hostBroacsters.Remove(uid);
                 workForm.BroadcasterLeave(uid);
-                System.Diagnostics.Debug.WriteLine($"{DateTime.Now.ToString("HH:mm:ss")}: remove conf {uid}");
+                DebugWriter.WriteTime($"remove conf {uid}");
             }
         }
-        internal static bool RecordAudio(bool state)
+
+        public static void SoftRelease()
         {
-            string direct = Environment.GetFolderPath(Environment.SpecialFolder.MyMusic) + "\\RSI";
-            string filename = $"AudioRecording-{DateTime.Now.ToString("dd-MM-yy-HH-mm-ss")}.wav";
+            m_channelHost?.InitEventHandler(null);
+            m_channelHost?.LeaveChannel();
+            m_channelHost?.Dispose();
+            m_channelHost = null;
 
-            if (false == System.IO.Directory.Exists(direct))
-                System.IO.Directory.CreateDirectory(direct);
+            m_channelSrc?.InitEventHandler(null);
+            m_channelSrc?.LeaveChannel();
+            m_channelSrc?.Dispose();
+            m_channelSrc = null;
 
-            SaveFileDialog fd = new() { 
-                DefaultExt="wav",
-                Filter = "Audio files(*.wav)|*.wav|Audio files(*.acc)|*.acc",
-                InitialDirectory = direct,
-                FileName = filename,
-            };
-
-            switch (state)
-            {
-                case true:
-                    fd.ShowDialog();
-
-                    filename = fd.FileName;
-
-                    if (System.IO.Path.GetDirectoryName(filename) == String.Empty)
-                        return false;
-
-                    AUDIO_RECORDING_QUALITY_TYPE quality = System.IO.Path.GetExtension(filename) == ".wav" ?
-                        AUDIO_RECORDING_QUALITY_TYPE.AUDIO_RECORDING_QUALITY_MEDIUM :
-                        AUDIO_RECORDING_QUALITY_TYPE.AUDIO_RECORDING_QUALITY_LOW;
-
-                    Rtc.StartAudioRecording(filename, quality);
-                    break;
-                default:
-                    Rtc.StopAudioRecording();
-                    break;
-            }
-            IsAudioRecordActive = state;
-            return true;
+            Rtc.InitEventHandler(null);
         }
+        public static void Release()
+        {
+            SoftRelease();
 
+            Rtc.LeaveChannel();
+            Rtc.Dispose();
+            Rtc = null;
+        }
 
     }
 }

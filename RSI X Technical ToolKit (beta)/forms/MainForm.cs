@@ -42,7 +42,6 @@ namespace RSI_X_Desktop.forms
             {
                 Hide();
                 Audience Audit = new();
-                AgoraObject.CurrentForm = CurForm.FormAudience;
                 Audit.Show(this);
             }
             else

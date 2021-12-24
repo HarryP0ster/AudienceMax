@@ -153,10 +153,7 @@ namespace RSI_X_Desktop.forms
 
         private void NewDevices_FormClosed(object sender, FormClosedEventArgs e)
         {
-            if (AgoraObject.CurrentForm != CurForm.FormAudience)
-            {
-                Dispose();
-            }
+            Dispose();
         }
 
         private void AcceptButton_Click(object sender, EventArgs e)
