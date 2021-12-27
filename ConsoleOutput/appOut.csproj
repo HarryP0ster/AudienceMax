@@ -17,7 +17,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Agorartc\agorartc.csproj" />
-    <ProjectReference Include="..\agorartc\agorartc\agorartc\agorartc.csproj" />
   </ItemGroup>
 
   <ItemGroup>

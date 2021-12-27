@@ -225,6 +225,8 @@ namespace RSI_X_Desktop
             AgoraObject.MuteAllRemoteAudioStream(false);
             AgoraObject.MuteAllRemoteVideoStream(false);
 
+            AgoraObject.SoftRelease();
+
             Devices.waveOutSetVolume(IntPtr.Zero, uint.MaxValue);
 
             Owner.Show();

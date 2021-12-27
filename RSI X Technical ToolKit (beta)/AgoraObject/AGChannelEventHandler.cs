@@ -55,7 +55,10 @@ namespace RSI_X_Desktop
                     break;
             }
         }
-        
+        public override void OnRemoteVideoStats(string channelId, RemoteVideoStats stats) 
+        {
+            DebugWriter.WriteTime($"{channelId} {stats.uid}: {stats.receivedBitrate}");
+        }
         public override void OnRemoteVideoStateChanged(string channelId, uint uid, REMOTE_VIDEO_STATE state,
             REMOTE_VIDEO_STATE_REASON reason, int elapsed)
         {

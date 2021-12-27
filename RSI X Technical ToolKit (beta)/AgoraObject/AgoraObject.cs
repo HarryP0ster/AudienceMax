@@ -220,14 +220,16 @@ namespace RSI_X_Desktop
 
         public static void SoftRelease()
         {
-            m_channelHost?.InitEventHandler(null);
             m_channelHost?.LeaveChannel();
-            m_channelHost?.Dispose();
-            m_channelHost = null;
-
-            m_channelSrc?.InitEventHandler(null);
             m_channelSrc?.LeaveChannel();
+
+            //m_channelHost?.InitEventHandler(null);
+            //m_channelSrc?.InitEventHandler(null);
+
             m_channelSrc?.Dispose();
+            m_channelHost?.Dispose();
+            
+            m_channelHost = null;
             m_channelSrc = null;
 
             Rtc.InitEventHandler(null);

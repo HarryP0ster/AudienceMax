@@ -48,7 +48,7 @@ namespace RSI_X_Desktop
             this.comboBoxPanel = new System.Windows.Forms.TableLayoutPanel();
             this.langBox = new ReaLTaiizor.Controls.MaterialComboBox();
             this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
-            this.mSwitchOriginal = new MaterialSkin.Controls.MaterialSwitch();
+            this.mSwitchOriginal = new ();
             this.labelOrig = new System.Windows.Forms.Label();
             this.labelRecord = new System.Windows.Forms.Label();
             this.RemotePanel = new System.Windows.Forms.TableLayoutPanel();
@@ -426,7 +426,7 @@ namespace RSI_X_Desktop
             this.mSwitchOriginal.Location = new System.Drawing.Point(0, 14);
             this.mSwitchOriginal.Margin = new System.Windows.Forms.Padding(0);
             this.mSwitchOriginal.MouseLocation = new System.Drawing.Point(-1, -1);
-            this.mSwitchOriginal.MouseState = MaterialSkin.MouseState.HOVER;
+            this.mSwitchOriginal.MouseState = ReaLTaiizor.Helper.MaterialDrawHelper.MaterialMouseState.HOVER;
             this.mSwitchOriginal.Name = "mSwitchOriginal";
             this.mSwitchOriginal.Ripple = true;
             this.mSwitchOriginal.Size = new System.Drawing.Size(50, 37);
@@ -622,7 +622,7 @@ namespace RSI_X_Desktop
         private System.Windows.Forms.Label labelAudio;
         private System.Windows.Forms.Label labelVideo;
         private System.Windows.Forms.Label label1;
-        private MaterialSkin.Controls.MaterialSwitch mSwitchOriginal;
+        private ReaLTaiizor.Controls.MaterialSwitch mSwitchOriginal;
         private ReaLTaiizor.Controls.Button button1;
         private ReaLTaiizor.Controls.AirTabPage airTabPage1;
         private ReaLTaiizor.Controls.Button button2;
