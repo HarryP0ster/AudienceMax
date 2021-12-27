@@ -48,7 +48,7 @@ namespace RSI_X_Desktop
             this.comboBoxPanel = new System.Windows.Forms.TableLayoutPanel();
             this.langBox = new ReaLTaiizor.Controls.MaterialComboBox();
             this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
-            this.mSwitchOriginal = new ();
+            this.mSwitchOriginal = new ReaLTaiizor.Controls.MaterialSwitch();
             this.labelOrig = new System.Windows.Forms.Label();
             this.labelRecord = new System.Windows.Forms.Label();
             this.RemotePanel = new System.Windows.Forms.TableLayoutPanel();
@@ -431,6 +431,7 @@ namespace RSI_X_Desktop
             this.mSwitchOriginal.Ripple = true;
             this.mSwitchOriginal.Size = new System.Drawing.Size(50, 37);
             this.mSwitchOriginal.TabIndex = 41;
+            this.mSwitchOriginal.UseAccentColor = false;
             this.mSwitchOriginal.UseVisualStyleBackColor = true;
             this.mSwitchOriginal.CheckedChanged += new System.EventHandler(this.mSwitchOriginal_CheckedChanged);
             // 

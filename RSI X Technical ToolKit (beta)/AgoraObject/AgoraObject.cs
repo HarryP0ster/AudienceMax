@@ -56,7 +56,14 @@ namespace RSI_X_Desktop
 
         [DllImport("USER32.DLL")]
         static extern bool GetWindowRect(IntPtr hWnd, out System.Drawing.Rectangle lpRect);
-
+        class observer : IAgoraRtcVideoFrameObserver
+        {
+            public override bool OnRenderVideoFrame(uint uid, VideoFrame videoFrame)
+            {
+                DebugWriter.WriteTime($"{uid}: {videoFrame.width} {videoFrame.height}");
+                return true;
+            }
+        }
         static AgoraObject() 
         {
             Rtc = AgoraRtcEngine.CreateAgoraRtcEngine();

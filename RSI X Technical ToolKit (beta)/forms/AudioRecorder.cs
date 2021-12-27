@@ -71,7 +71,7 @@ namespace RSI_X_Desktop.forms
         List<ChanBtn> BtnCmbPairs = new();
         List<ChanBtn> BtnCmbPairs2 = new();
         List<Process> XAgora = new();
-        List<langHolder> Langs = AgoraObject.GetComplexToken().GetTranslLangs;
+        readonly List<langHolder> Langs = AgoraObject.GetComplexToken().GetTranslLangs;
         int Output_ind = 0;
 
 
@@ -82,7 +82,9 @@ namespace RSI_X_Desktop.forms
             host.langFull = AgoraObject.GetHostName();
             host.langShort = "Floor";
             host.token = AgoraObject.GetHostToken();
-            Langs.Insert(0, host);
+            
+            if (Langs.IndexOf(host) != 0)
+                Langs.Insert(0, host);
             //Переменная для языков
             var langs = AgoraObject.GetComplexToken();
             var controls = panelRelayButtons.Controls;

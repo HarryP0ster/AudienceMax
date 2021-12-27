@@ -254,7 +254,7 @@ namespace RSI_X_Desktop
 
         private void Settings_Click(object sender, EventArgs e)
         {
-            if (devices == null || devices.IsDisposed)
+            if (devices == null || devices.IsDisposed || devices.Disposing)
             {
                 devices = new Devices();
                 CallSidePanel(devices);
@@ -416,15 +416,17 @@ namespace RSI_X_Desktop
                     }
                 }
             }
-
             var ret = new VideoCanvas(
                 (ulong)newPreview.Handle,
+                //(ulong)f.Handle,
                 RENDER_MODE_TYPE.RENDER_MODE_FIT,
                 channelId, uid);
+            //f.Show();
 
             AgoraObject.Rtc.SetupRemoteVideo(ret);
             streamsTable.Refresh();
         }
+        //Form f = new();
 
         private void RemoveMember(uint uid)
         {

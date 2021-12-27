@@ -53,6 +53,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Remove="forms\AudioRecorder.resx" />
     <EmbeddedResource Remove="X-tractor.resx" />
   </ItemGroup>
 
@@ -168,6 +169,10 @@
     <None Remove="Resources\плашка слева.png" />
     <None Remove="Resources\плашка.png" />
     <None Remove="Resources\спикер.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="forms\AudioRecorder.resx" />
   </ItemGroup>
 
   <ItemGroup>
