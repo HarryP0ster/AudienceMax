@@ -16,7 +16,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Agorartc\agorartc.csproj" />
+    <ProjectReference Include="..\..\RSI-AUDIENCE\agorartc\agorartc.csproj" />
   </ItemGroup>
 
   <ItemGroup>
